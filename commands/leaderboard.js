@@ -3,10 +3,11 @@ const fs = module.require('fs');
 module.exports.run = async (bot, msg) => {
     fs.readFile('./userXP.json', 'utf8', async (err, res) => {
         if(err) console.log(err);
-        let xpList = await (Object.values(JSON.parse(res))).sort((l, r) => r.score - l.score);
+        let xpList = await (Object.values(JSON.parse(res)))
+            .sort((l, r) => r['servers'][msg.guild.id].score - l['servers'][msg.guild.id].score);
         let pages = chunk(xpList, 10);
         pages.forEach((chunk, i)  => {
-            pages[i] = chunk.map((obj, j) => `${i*10+j+1}. ${obj.name}: ${obj.score}`);
+            pages[i] = chunk.map((obj, j) => `${i*10+j+1}. ${obj.name}: ${obj['servers'][msg.guild.id].score}`);
         });
         swapPage(msg, 0, pages);
     });
