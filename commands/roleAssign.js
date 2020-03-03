@@ -2,7 +2,6 @@ const fs = module.require('fs');
 
 module.exports.run = async (bot) => {
     console.log("Resetting roles");
-    fs.writeFile('./userXP.json', {});
     fs.readFile('./userXP.json', 'utf8', async (xpErr, xpRes) => {
         if(xpErr) console.log(xpErr);
         fs.readFile('./roleToAssign.json', 'utf8', async (roleErr, roleRes) => {
@@ -36,7 +35,8 @@ module.exports.run = async (bot) => {
                 }
             });
         });
-    })
+    });
+    fs.writeFile('./userXP.json', {});
 };
 
 module.exports.help = {
