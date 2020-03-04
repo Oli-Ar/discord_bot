@@ -3,9 +3,10 @@ const fs = module.require('fs');
 module.exports.run = async (bot, msg) => {
     fs.readFile('./userXP.json', 'utf8', async (err, res) => {
         if(err) console.log(err);
-        //FIXME: server checks
         let xpList = await (Object.values(JSON.parse(res)))
+            .filter(o => o['servers'][msg.guild.id])
             .sort((l, r) => r['servers'][msg.guild.id].score - l['servers'][msg.guild.id].score);
+        if(xpList.length <= 0) return msg.channel.send("No users have spoken in this server");
         let pages = chunk(xpList, 10);
         pages.forEach((chunk, i)  => {
             pages[i] = chunk.map((obj, j) => `${i*10+j+1}. ${obj.name}: ${obj['servers'][msg.guild.id].score}`);
