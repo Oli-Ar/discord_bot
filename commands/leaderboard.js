@@ -35,15 +35,15 @@ function swapPage(msg, sentMessage, page, pages) {
             if(page !== 0) message.react('⬅');
             if(page !== pages.length-1) message.react('➡');
             message.awaitReactions(filter, {max: 1})
-                .then(reactions => {
+                .then(async reactions => {
                     if(reactions.first().emoji.name === '⬅' && page !== 0) {
-                        message.clearReactions();
+                        await message.clearReactions();
                         return swapPage(msg, message, --page, pages);
                     } else if(page !== page.length-1) {
-                        message.clearReactions();
+                        await message.clearReactions();
                         return swapPage(msg, message, ++page, pages);
                     } else {
-                        message.clearReactions();
+                        await message.clearReactions();
                         return swapPage(msg, message, page, pages);
                     }
                 }).catch(err => console.log(err));
