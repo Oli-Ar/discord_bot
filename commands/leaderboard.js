@@ -26,7 +26,7 @@ function chunk(array, size) {
 
 function swapPage(msg, sentMessage, page, pages) {
     const filter = (reaction, user) => {
-        return ['⬅', '➡'].includes(reaction.emoji.name) && user.id === msg.author.id && !user.bot;
+        return ['⬅', '➡'].includes(reaction.emoji.name) && !user.bot;
     };
 
     if(pages.length === 0) return msg.channel.send("Leaderboard Empty.");
