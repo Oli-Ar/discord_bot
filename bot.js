@@ -15,7 +15,7 @@ fs.readdir('./commands/', async (err, res) => {
     });
 });
 
-bot.on('ready', async () => console.log("Bot online: " + await bot.generateInvite([67584])));
+bot.on('ready', async () => console.log("Bot online: " + await bot.generateInvite([1342449728])));
 bot.on('error', async (err) => console.log(err));
 
 bot.on('message', async msg => {
