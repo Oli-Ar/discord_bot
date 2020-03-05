@@ -10,6 +10,11 @@ module.exports.run = async (bot) => {
         let sortedUserList = (Object.values(users))
             .filter(o => o['servers'][server.serverID])
             .sort((l, r) => r['servers'][server.serverID].score - l['servers'][server.serverID].score);
+        sortedUserList.forEach(user => {
+            let guild = bot.guilds.get(server.serverID);
+            let member = guild.members.get(user.id);
+            member.removeRole(guild.roles.get(server.roleID));
+        });
         addRoles(bot, sortedUserList, servers, server, 0, 0);
     });
 
