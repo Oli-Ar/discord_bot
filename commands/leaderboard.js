@@ -1,11 +1,12 @@
 const fs = module.require('fs');
+const quickSort = require('../quickSort');
 
 module.exports.run = async (bot, msg) => {
     fs.readFile('./userXP.json', 'utf8', async (err, res) => {
         if(err) console.log(err);
         let xpList = await (Object.values(JSON.parse(res)))
-            .filter(o => o['servers'][msg.guild.id])
-            .sort((l, r) => r['servers'][msg.guild.id].score - l['servers'][msg.guild.id].score);
+            .filter(o => o['servers'][msg.guild.id]);
+        xpList = quickSort.sort(msg, xpList);
         if(xpList.length <= 0) return msg.channel.send("No users have spoken in this server");
         let pages = chunk(xpList, 10);
         pages.forEach((chunk, i)  => {
@@ -27,7 +28,7 @@ function chunk(array, size) {
 
 function swapPage(msg, sentMessage, page, pages) {
     const filter = (reaction, user) => {
-        return ['⬅', '➡'].includes(reaction.emoji.name) && !user.bot;
+        return (['⬅', '➡'].includes(reaction.emoji.name) && !user.bot);
     };
 
     if(pages.length === 0) return msg.channel.send("Leaderboard Empty.");
