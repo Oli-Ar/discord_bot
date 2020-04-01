@@ -7,13 +7,12 @@ module.exports.run = async (bot) => {
     let servers = JSON.parse(await readFile('./roleToAssign.json'));
     let users = JSON.parse(await readFile('./userXP.json'));
     Object.values(servers).forEach(server => {
+        let guild = bot.guilds.get(server.serverID);
         let sortedUserList = (Object.values(users))
             .filter(o => o['servers'][server.serverID])
             .sort((l, r) => r['servers'][server.serverID].score - l['servers'][server.serverID].score);
-        const remvRolePromise = sortedUserList.map(user => new Promise((resolve, reject) => {
-            let guild = bot.guilds.get(server.serverID);
-            let member = guild.members.get(user.id);
-            if(!member) return;
+        const remvRolePromise = guild.members.map(member => new Promise((resolve, reject) => {
+            if(!member.roles.has(server.roleID)) return;
             member.removeRole(guild.roles.get(server.roleID))
                 .then(() => {
                     console.log(`Removed role from ${member.user.username}`);
