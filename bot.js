@@ -32,6 +32,6 @@ bot.on('message', async msg => {
 });
 
 const roleAssign = require('./commands/roleAssign');
-let month = schedule.scheduleJob('* * * 1 * *', _ => roleAssign.run(bot));
+let month = schedule.scheduleJob('1 0 * 1 * *', _ => roleAssign.run(bot));
 
 bot.login(botSettings.token).catch(err => console.log(err));
