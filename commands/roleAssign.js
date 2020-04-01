@@ -13,7 +13,11 @@ module.exports.run = async (bot) => {
         sortedUserList.forEach(user => {
             let guild = bot.guilds.get(server.serverID);
             let member = guild.members.get(user.id);
-            member.removeRole(guild.roles.get(server.roleID));
+            if(!member) return;
+            member.removeRole(guild.roles.get(server.roleID))
+                .catch(err => {
+                    console.log(err);
+                });
         });
         addRoles(bot, sortedUserList, servers, server, 0, 0);
     });
