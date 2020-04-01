@@ -10,16 +10,18 @@ module.exports.run = async (bot) => {
         let sortedUserList = (Object.values(users))
             .filter(o => o['servers'][server.serverID])
             .sort((l, r) => r['servers'][server.serverID].score - l['servers'][server.serverID].score);
-        sortedUserList.forEach(user => {
+        const remvRolePromise = sortedUserList.map(user => new Promise((resolve, reject) => {
             let guild = bot.guilds.get(server.serverID);
             let member = guild.members.get(user.id);
             if(!member) return;
             member.removeRole(guild.roles.get(server.roleID))
-                .catch(err => {
-                    console.log(err);
-                });
-        });
-        addRoles(bot, sortedUserList, servers, server, 0, 0);
+                .then(() => {
+                    console.log(`Removed role from ${member.user.username}`);
+                    resolve(member);
+                })
+                .catch(err => {console.log(err); reject(err)});
+        }));
+        Promise.all(remvRolePromise).then(() => addRoles(bot, sortedUserList, servers, server, 0, 0));
     });
 
     fs.writeFile('./userXP.json', JSON.stringify({}), err => {if(err) console.log(err);});
@@ -34,9 +36,10 @@ function addRoles(bot, userList, rolesList, server, i, j) {
         let role = guild.roles.get(rolesList[server.serverID]['roleID']);
         if(!member) return;
         if (member.permissions.has("BAN_MEMBERS") && i <= 10) {
-            member.addRole(role);
-        } else if (!member.permissions.has("BAN_MEMBERS") && j <= 10) {
-            member.addRole(role); j++
+            member.addRole(role).then(() => console.log(`Assigned ${member.user.username} role`));
+        } else {
+            member.addRole(role).then(() => console.log(`Assigned ${member.user.username} role`));
+            j++;
         }
         i++
     }
