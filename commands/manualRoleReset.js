@@ -1,4 +1,4 @@
-const roleAssign = require('../commands/roleAssign');
+const roleAssign = require('./roleAssign');
 
 module.exports.run = async (bot, msg) => {
     await roleAssign.run(bot);
