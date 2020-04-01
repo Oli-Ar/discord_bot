@@ -12,7 +12,7 @@ module.exports.run = async (bot) => {
             .filter(o => o['servers'][server.serverID])
             .sort((l, r) => r['servers'][server.serverID].score - l['servers'][server.serverID].score);
         const remvRolePromise = guild.members.map(member => new Promise((resolve, reject) => {
-            if(!member.roles.has(server.roleID)) return;
+            if(!member.roles.has(server.roleID)) resolve(member);
             member.removeRole(guild.roles.get(server.roleID))
                 .then(() => {
                     console.log(`Removed role from ${member.user.username}`);
