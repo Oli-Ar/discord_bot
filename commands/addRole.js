@@ -10,21 +10,23 @@ module.exports.run = async (bot, msg) => {
     fs.readFile('./roleToAssign.json', 'utf8', async (err, res) => {
         if(err) console.log(err);
         let data = JSON.parse(res);
-        if(data[msg.guild.id]) {
-            console.log("Here");
+        let returnMsg = "";
+        if(data[msg.guild.id] && data[msg.guild.id].roleID === role.id.toString()) {
+            returnMsg += (msg.guild.roles.get(data[msg.guild.id].roleID)).name + " will no longer be assigned to top 10";
             delete data[msg.guild.id];
         } else {
             data[msg.guild.id] = {
                 "roleID": role.id.toString(),
                 "serverID": msg.guild.id.toString()
             };
+            returnMsg += role.name + " is now assigned to the top 10";
         }
 
         fs.writeFile('./roleToAssign.json', JSON.stringify(data, null, 4), async err => {
             if(err) console.log(err);
         });
+        msg.channel.send(returnMsg);
     })
-
 };
 
 module.exports.help = {
