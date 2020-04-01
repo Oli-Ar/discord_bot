@@ -32,6 +32,7 @@ function addRoles(bot, userList, rolesList, server, i, j) {
         let guild = bot.guilds.get(server.serverID);
         let member = guild.members.get(user.id);
         let role = guild.roles.get(rolesList[server.serverID]['roleID']);
+        if(!member) return;
         if (member.permissions.has("BAN_MEMBERS") && i <= 10) {
             member.addRole(role);
         } else if (!member.permissions.has("BAN_MEMBERS") && j <= 10) {
