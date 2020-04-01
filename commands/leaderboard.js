@@ -6,9 +6,9 @@ module.exports.run = async (bot, msg) => {
         if(err) console.log(err);
         let xpList = await (Object.values(JSON.parse(res)))
             .filter(o => o['servers'][msg.guild.id]);
-        xpList = quickSort.sort(msg, xpList.slice(0, 100));
+        xpList = quickSort.sort(msg, xpList);
         if(xpList.length <= 0) return msg.channel.send("No users have spoken in this server");
-        let pages = chunk(xpList, 10);
+        let pages = chunk(xpList.slice(0, 100), 10);
         pages.forEach((chunk, i)  => {
             pages[i] = chunk.map((obj, j) => `${i*10+j+1}. ${obj.name}: ${obj['servers'][msg.guild.id].score}`);
         });
