@@ -39,13 +39,13 @@ function swapPage(msg, sentMessage, page, pages) {
             message.awaitReactions(filter, {max: 1})
                 .then(async reactions => {
                     if(reactions.first().emoji.name === '⬅' && page !== 0) {
-                        await message.clearReactions();
+                        await message.reactions.removeAll();
                         return swapPage(msg, message, --page, pages);
                     } else if(page !== page.length-1) {
-                        await message.clearReactions();
+                        await message.reactions.removeAll();
                         return swapPage(msg, message, ++page, pages);
                     } else {
-                        await message.clearReactions();
+                        await message.reaction.removeAll();
                         return swapPage(msg, message, page, pages);
                     }
                 }).catch(err => console.log(err));
