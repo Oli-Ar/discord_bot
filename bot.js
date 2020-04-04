@@ -15,7 +15,12 @@ fs.readdir('./commands/', async (err, res) => {
     });
 });
 
-bot.on('ready', async () => console.log("Bot online: " + await bot.generateInvite([1342449728])));
+bot.on('ready', async () => {
+    console.log("Bot online: " + await bot.generateInvite([1342449728]));
+    commands
+        .filter(c => c.help.runOn === 'bot-ready')
+        .forEach(c => c.run(bot));
+});
 bot.on('error', async (err) => console.log(err));
 
 bot.on('message', async msg => {
@@ -31,7 +36,19 @@ bot.on('message', async msg => {
     }
 });
 
+bot.on('messageReactionAdd', async (reaction, user) => {
+   commands
+       .filter(c => c.help.runOn === 'reactionAdd')
+       .forEach(c => c.run(bot, reaction, user));
+});
+
+bot.on('messageReactionRemove', async (reaction, user) => {
+    commands
+        .filter(c => c.help.runOn === 'reactionRemove')
+        .forEach(c => c.run(bot, reaction, user));
+});
+
 const roleAssign = require('./commands/roleAssign');
-let month = schedule.scheduleJob({second: 1, minute: 1, hour: 0, date: 1}, _ => roleAssign.run(bot));
+let month = schedule.scheduleJob({second: 1, minute: 1, hour: 0, date: 1}, () => roleAssign.run(bot));
 
 bot.login(botSettings.token).catch(err => console.log(err));
