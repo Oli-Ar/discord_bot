@@ -40,6 +40,6 @@ function addRoles(bot, userList, rolesList, server, i, j) {
 }
 
 module.exports.help = {
-    "title": 'roleassign',
-    "runOn": 'schedule'
+    title: 'roleassign',
+    runOn: 'schedule'
 };

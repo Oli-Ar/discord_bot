@@ -7,6 +7,6 @@ module.exports.run = async (bot, msg) => {
 };
 
 module.exports.help = {
-    "title": 'resetroles',
-    "runOn": 'prefix'
+    title: 'resetroles',
+    runOn: 'prefix'
 };

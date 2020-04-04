@@ -30,6 +30,6 @@ module.exports.run = async (bot, msg) => {
 };
 
 module.exports.help = {
-    "title": 'role',
-    "runOn": 'prefix'
+    title: 'role',
+    runOn: 'prefix'
 };

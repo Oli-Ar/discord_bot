@@ -53,6 +53,6 @@ function swapPage(msg, sentMessage, page, pages) {
 }
 
 module.exports.help = {
-    'title': 'leaderboard',
-    'runOn': 'prefix'
+    title: 'leaderboard',
+    runOn: 'prefix'
 };

@@ -32,6 +32,6 @@ module.exports.run = async (bot, msg) => {
 };
 
 module.exports.help = {
-    "title": 'addxp',
-    "runOn": 'allMessages'
+    title: 'addxp',
+    runOn: 'allMessages'
 };
