@@ -1,11 +1,11 @@
-module.exports.sort = (msg, arrayToSort, compare = defaultComparator) => {
+module.exports.sort = (guild, arrayToSort, compare = defaultComparator) => {
     const sortedArray = [ ...arrayToSort ];
     const recursiveSort = (low, high) => {
         if (high - low < 1) return;
         const pivot = sortedArray[high];
         let splitIndex = low;
         for (let i = low; i < high; i++) {
-            const sort = compare(pivot['servers'][msg.guild.id]['score'], sortedArray[i]['servers'][msg.guild.id]['score']);
+            const sort = compare(pivot['servers'][guild.id]['score'], sortedArray[i]['servers'][guild.id]['score']);
             if (sort === -1) {
                 if (splitIndex !== i) {
                     const temp = sortedArray[splitIndex];
