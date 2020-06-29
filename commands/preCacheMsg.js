@@ -1,7 +1,8 @@
 const fs = module.require('fs');
 
 module.exports.run = async (bot) => {
-    fs.readFile('./autoRoles.json', 'utf8', async (err, res) => {
+    // Fetches messages to be cached so the bot receives events from them
+    fs.readFile('./roleMessages.json', 'utf8', async (err, res) => {
         if(err) console.log(err);
         let msgsToMonitor = Object.values(JSON.parse(res));
         msgsToMonitor.forEach(msg => {
@@ -13,5 +14,11 @@ module.exports.run = async (bot) => {
 
 module.exports.help = {
     title: 'pre-cache-messages',
-    runOn: 'bot-ready'
+    runOn: 'bot-ready',
+    help: {
+        name: "Pre-Cache Messages",
+        type: 'function',
+        short_message: "Fetches certain messages in order to cache them.",
+        long_message: "Fetches messages that the bot needs to have cached in order to receive events the messages emit.",
+    }
 };
