@@ -1,6 +1,7 @@
 const fs = module.require('fs');
 
 module.exports.run = async (bot, msg) => {
+    if(!msg.member.permissions.has('BAN_MEMBERS')) return;
     // Gets the new prefix
     let newPrefix = msg.content.split(" ")[1];
     // Reads the old prefix
