@@ -2,20 +2,20 @@ const Discord = require('discord.js');
 const fs = require('fs');
 
 // Creates the bot and fetches it's settings and creates a collection for the commands to be stored in
-const bot = new Discord.Client({ disableEveryone: true });
+const bot = new Discord.Client({ disableMentions: 'everyone' });
 bot.settings = require('./config');
 bot.commands = new Discord.Collection();
 
 // Reads the commands folder
 fs.readdir('./commands/', async (err, res) => {
     if(err) console.log(err);
-    // Finds all the js files
-    let files = res.filter(f => f.split('.').pop() === 'js');
-    // Each file is given a name defined in the file and the exports are saved in the commands collection
-    files.forEach(f => {
-        let command = require(`./commands/${f}`);
-        bot.commands.set(command.help.title, command);
-    });
+    // Finds all the js files then each file is given a name defined in the file and the exports are saved in the
+    // commands collection
+    res.filter(f => f.split('.').pop() === 'js')
+        .forEach(f => {
+            let command = require(`./commands/${f}`);
+            bot.commands.set(command.help.title, command);
+        });
 });
 
 // When the bot is ready an invite link is generated and the commands to be ran as soon as the bot is ready
@@ -26,7 +26,7 @@ bot.on('ready', async () => {
         .forEach(c => c.run(bot));
 });
 
-bot.on('error', async (err) => console.log(err));
+bot.on('error', async err => console.log(err));
 
 // On a message being sent first functions to be ran on all messages are ran, next if the message starts with the
 // prefix the bot checks the command and searches to bot commands for the command, if the command exists it's ran
