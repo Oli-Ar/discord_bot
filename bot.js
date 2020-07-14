@@ -11,7 +11,8 @@ fs.readdir('./commands/', async (err, res) => {
     if(err) console.log(err);
     // Finds all the js files then each file is given a name defined in the file and the exports are saved in the
     // commands collection
-    res.filter(f => f.split('.').pop() === 'js')
+    res
+        .filter(f => f.split('.').pop() === 'js')
         .forEach(f => {
             let command = require(`./commands/${f}`);
             bot.commands.set(command.help.title, command);
