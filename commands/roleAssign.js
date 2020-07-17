@@ -65,21 +65,21 @@ const getTopMembers = async (bot, userPromise, server, i, j) => {
 // Fetches users on the current server with the role to be assigned on the server
 const getPastTopMembers = async (role, server) => {
     return await role.then(role => {
-        return server.members.cache.filter(m => m.roles.cache.has(role.roleID));
+        return server.members.cache.filter(async m => m.roles.cache.has((await role).roleID));
     });
 };
 
 // Assigns the roles to users in a collection passed as an argument into the function
 const assignRoles = async (members, role) => {
     await role.then(role => {
-        members.forEach(async member => member.roles.add(role.roleID));
+        members.forEach(async member => member.roles.add((await role).roleID));
     });
 }
 
 // Removes roles from users in a collection passed as an argument into the function
 const removeRoles = async (members, role) => {
     await role.then(role => {
-        members.forEach(async member => member.roles.remove(role.roleID));
+        members.forEach(async member => member.roles.remove((await role).roleID));
     });
 }
 
