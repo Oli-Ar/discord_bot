@@ -1,7 +1,7 @@
 const fs = module.require('fs');
 
 module.exports.run = async (bot, msg) => {
-    if(!msg.member.permissions.has('BAN_MEMBERS')) return;
+    if(msg && !msg.member.permissions.has('BAN_MEMBERS')) return;
     // Reads the leaderboard file and writes the raw buffer to a new file named after the epoch timestamp
     fs.readFile('./userXP.json', (err, res) => {
         if(err) console.log(err);
