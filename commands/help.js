@@ -45,7 +45,7 @@ module.exports.run = async (bot, msg) => {
             embed.addFields(usages);
         }
         return await msg.channel.send(embed);
-    } else { return msg.channel.send("Please mention a valid command or function, to see commands use `!help`.") }
+    } else { return msg.channel.send("Please mention a valid command or function, to see commands use `[prefix]help`.".replace("[prefix]", bot.settings.prefix)) }
 };
 
 module.exports.help = {
@@ -62,4 +62,4 @@ module.exports.help = {
             help: "[prefix]help (<command or function name>)"
         }
     }
-}
+};
