@@ -2,11 +2,11 @@ const fs = module.require('fs');
 
 // Checks if the message is an autorole message if it is the users role assigned by the message is removed
 module.exports.run = async (bot, reaction, user) => {
-    fs.readFile('./roleMessages.json', 'utf8', async (err, res) => {
+    fs.readFile('./botMessages.json', 'utf8', async (err, res) => {
         if(err) console.log(err);
-        let messagesToReactTo = Object.values(JSON.parse(res));
-        let message = messagesToReactTo.filter(element => element.msgID === reaction.message.id.toString())[0];
-        if(!message) return;
+        let messagesToReactTo = JSON.parse(res);
+        let message = messagesToReactTo[reaction.message.id.toString()];
+        if(!message || message.type !== 'roleMessage') return;
         reaction.message.guild.members.cache.get(user.id).roles.remove(message.roleID);
     });
 };

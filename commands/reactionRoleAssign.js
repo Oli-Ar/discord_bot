@@ -2,12 +2,12 @@ const fs = module.require('fs');
 
 // Function that runs when a user react to a message
 module.exports.run = async (bot, reaction, user) => {
-    fs.readFile('./roleMessages.json', 'utf8', async (err, res) => {
+    fs.readFile('./botMessages.json', 'utf8', async (err, res) => {
         if (err) console.log(err);
-        let messagesToReactTo = Object.values(JSON.parse(res));
+        let messagesToReactTo = JSON.parse(res);
         // Checks if the message being reacted to is an autorole message
-        let message = messagesToReactTo.filter(element => element.msgID === reaction.message.id.toString())[0];
-        if(!message) return;
+        let message = messagesToReactTo[reaction.message.id.toString()];
+        if(!message || message.type !== 'roleMessage') return;
         // If the message is an autorole message the user receives the role the message is assigning
         if(message.strict === true) {
             if(!message.reqRoleID || message.reqRoleID.every(e => reaction.message.guild.members.cache.get(user.id).roles.cache.has(e))) {
