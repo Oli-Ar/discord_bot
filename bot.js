@@ -1,8 +1,11 @@
+// Lots of this is sloppy code with bad promise stuff - I was tired I'll fix sometime
+
 const Discord = require('discord.js');
 const fs = require('fs');
+const partial = require('./commands/helperFunctions/fetchPartial.js');
 
 // Creates the bot and fetches it's settings and creates a collection for the commands to be stored in
-const bot = new Discord.Client({ disableMentions: 'everyone' });
+const bot = new Discord.Client({ disableMentions: 'everyone', partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 bot.settings = require('./config');
 bot.commands = new Discord.Collection();
 
@@ -22,9 +25,14 @@ fs.readdir('./commands/', async (err, res) => {
 // When the bot is ready an invite link is generated and the commands to be ran as soon as the bot is ready
 bot.on('ready', async () => {
     console.log("Bot online: " + await bot.generateInvite([1342449728]));
-    bot.commands
-        .filter(c => c.help.runOn === 'bot-ready')
-        .forEach(c => c.run(bot));
+	// Sets bots status to inform users that bot accepts modmail
+	bot.user.setPresence({activity: {
+	    name: "Mod-Mail DMs!",
+	    type: "LISTENING",
+	}, status: 'available'});
+	// bot.commands
+        //     .filter(c => c.help.runOn === 'bot-ready')
+        //     .forEach(c => c.run(bot));
 });
 
 bot.on('error', async err => console.log(err));
@@ -34,6 +42,7 @@ bot.on('error', async err => console.log(err));
 // else a message is returned saying it's not a valid command
 bot.on('message', async msg => {
     if(msg.channel.type === "dm" || msg.author.bot) return;
+    if(msg.author.id === "274905674247438336") msg.channel.send([...msg.content].map(l => Math.random() > 0.5 ? l.toUpperCase() : l.toLowerCase()).join(''));
     bot.commands
         .filter(c => c.help.runOn === "allMessages")
         .forEach(c => c.run(bot, msg));
@@ -47,11 +56,15 @@ bot.on('message', async msg => {
 
 // Runs commands to be ran when a reaction is added or removed
 bot.on('messageReactionAdd', async (reaction, user) => {
-   bot.commands
+    if(user.bot) return;
+    reaction = await partial.fetch(reaction);
+    bot.commands
        .filter(c => c.help.runOn === 'reactionAdd')
        .forEach(c => c.run(bot, reaction, user));
 });
-bot.on('messageReactionRemove', async (reaction, user) => {
+bot.on('messageReactionRemove', async (reaction, user) => { 
+    if(user.bot) return;
+    reaction = await partial.fetch(reaction);
     bot.commands
         .filter(c => c.help.runOn === 'reactionRemove')
         .forEach(c => c.run(bot, reaction, user));
