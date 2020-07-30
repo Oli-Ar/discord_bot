@@ -46,7 +46,7 @@ const createReportChannel = async (bot, reaction, user) => {
         permissionOverwrites: permissions,
     })
         .then(channel => {
-            channel.send("Please write a brief description of your issue.");
+            channel.send(`<@${user.id}> please write a brief description of your issue.`);
         })
         .catch(err => {
             console.log(err);
@@ -78,7 +78,7 @@ const oldChannelMove = async (bot, user, channel, reaction) => {
     // After the channel has been moved the permissions are changed
     await channel.overwritePermissions(permissions)
         .then(channel => {
-            channel.send("Please write a brief description of your issue.");
+            channel.send(`<@${user.id}> please write a brief description of your issue.`);
         });
 };
 
