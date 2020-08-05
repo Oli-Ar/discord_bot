@@ -5,8 +5,8 @@ module.exports.run = async (bot, reaction, user) => {
     let targetGuild = await reaction.message.guild;
     fs.readFile('./botMessages.json', 'utf8', (err, res) => {
         let messages = JSON.parse(res);
-	let message = messages[reaction.message.id];
-	if(!message || user.bot || message.type !== 'modmail') return;
+        let message = messages[reaction.message.id];
+        if(!message || user.bot || message.type !== 'modmail') return;
         // Removes the reaction so the user can react again to reopen modmail channel
         reaction.users.remove(user);
         // Checks if the user has a past modmail channel and if they do it is moved the active reports category, 
@@ -98,12 +98,12 @@ const createReportsCategory = async (bot, reaction, targetGuild) => {
 module.exports.help = {
     title: 'channel-create',
     runOn: 'reactionAdd',
-	help: {
-	    name: "Channel Create",
-    	    type: 'function',
+        help: {
+            name: "Channel Create",
+            type: 'function',
             short_message: "Creates a channel a user can use the contact the admins with when a message is reacted to.",
-	    long_message: "When a user reacts to a message to contact the mods the bot creates a category for user " + 
-	        "mod mail, then creates a channel for that user. If the user has contacted the mods before the " +
-	        "bot will pull their old channel from the archive of reports."
-	}
+            long_message: "When a user reacts to a message to contact the mods the bot creates a category for user " + 
+                "mod mail, then creates a channel for that user. If the user has contacted the mods before the " +
+                "bot will pull their old channel from the archive of reports."
+        }
 };

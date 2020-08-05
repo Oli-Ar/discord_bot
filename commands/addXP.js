@@ -4,7 +4,7 @@ module.exports.run = async (bot, msg) => {
     fs.readFile('./userXP.json', 'utf8', async (err, res) => {
         if (err) console.log(err);
         let users = JSON.parse(res);
-
+        
         // If the user has sent a message within the last 60 seconds the function returns to prevent gaining xp via spam
         // Also doesn't give XP for commands
         if (
@@ -17,7 +17,7 @@ module.exports.run = async (bot, msg) => {
         ) {
             return;
         }
-
+        
         // If a user has not sent a message before a new JSON key and value is created for them
         if(!users[msg.author.id]) {
             users[msg.author.id] = {
@@ -26,7 +26,7 @@ module.exports.run = async (bot, msg) => {
                 "servers": {}
             };
         }
-
+        
         // Edits the users score on the server the user is speaking in, also resets the 60s timer
         users[msg.author.id]['servers'][msg.guild.id] = {
             'server': msg.guild.id.toString(),
@@ -36,7 +36,7 @@ module.exports.run = async (bot, msg) => {
             // Resets the timer
             'lastTime': Math.round((new Date).getTime()/1000)
         };
-
+        
         // Writes new data to the central file
         fs.writeFile('./userXP.json', JSON.stringify(users, null, 2), async (err) => {
             if(err) console.log(err);

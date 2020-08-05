@@ -29,7 +29,7 @@ module.exports.run = async (bot, msg) => {
         if(err) console.log(err);
         let data = JSON.parse(res);
         let returnMsg = "";
-
+        
         // Switch statement to handle what happens on each action and to make sure the correct response is sent
         switch (action) {
             case 'add':
@@ -60,7 +60,7 @@ module.exports.run = async (bot, msg) => {
                     returnMsg += "The current role being assigned is: " + msg.guild.roles.cache.get(data[msg.guild.id].roleID).name;
                 }
         }
-
+        
         // The potentially edited data is then saved to the correct file
         fs.writeFile('./roleToAssign.json', JSON.stringify(data, null, 2), async err => {
             if(err) return console.log(err);

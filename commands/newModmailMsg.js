@@ -35,7 +35,7 @@ module.exports.run = async (bot, msg) => {
                         'msgID': sentMessage.id.toString(),
                         'channelID': sentMessage.channel.id.toString(),
                         'serverID': sentMessage.guild.id.toString(),
-			'type': 'modmail'
+                        'type': 'modmail'
                     };
                     fs.writeFile('./botMessages.json', JSON.stringify(currentMessages, null, 2), (err) => {
                         if(err) {
@@ -88,15 +88,15 @@ module.exports.run = async (bot, msg) => {
 module.exports.help = {
     title: 'modmailmessage',
     runOn: 'prefix',
-	help: {
-		name: "Report Reaction Message",
-		type: 'command',
-		short_message: "Creates a message that users can react to in order to create a channel to contact the moderators of the server.",
-		long_message: "Post a defined message in a defined channel. When a user reacts to the message the bot will then run the " +
-			"'Report Channel Create' command to create a channel where the user can directly talk to the mods of the server.",
-		usage: {
-			create: "[prefix]modmailmessage --message <message> --channel <name of channel>",
-			remove: "[prefix]modmailmessage --delete --msgID <id of modmail message>"
-		}
-	}
+        help: {
+            name: "Report Reaction Message",
+            type: 'command',
+            short_message: "Creates a message that users can react to in order to create a channel to contact the moderators of the server.",
+            long_message: "Post a defined message in a defined channel. When a user reacts to the message the bot will then run the " +
+                "'Report Channel Create' command to create a channel where the user can directly talk to the mods of the server.",
+            usage: {
+                create: "[prefix]modmailmessage --message <message> --channel <name of channel>",
+                remove: "[prefix]modmailmessage --delete --msgID <id of modmail message>"
+            }
+        }
 };

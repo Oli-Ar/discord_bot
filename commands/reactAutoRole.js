@@ -35,7 +35,7 @@ module.exports.run = async (bot, msg) => {
             if(allMsgData[roleToAssign.id.toString()]) {
                 return msg.channel.send("There's an existing message assigning this role.");
             }
-
+            
             // Formats a message that displays what roles are required to receive the reaction role
             let requiredRoles = requireRoles(roleReq, strict);
             // Sends the message and reacts to it with a tickbox, then saves information about the message so it can be deleted later if needed
@@ -48,7 +48,7 @@ module.exports.run = async (bot, msg) => {
                     "reqRoleID": roleReq ? roleReq.map(e => e.id.toString()) : undefined,
                     "strict": strict,
                     "serverID": msg.guild.id.toString(),
-					"type": 'roleMessage'
+                    "type": 'roleMessage'
                 };
                 fs.writeFile('./botMessages.json', JSON.stringify(allMsgData, null, 4), async err => {
                     if (err) console.log(err);

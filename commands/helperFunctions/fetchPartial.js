@@ -1,3 +1,5 @@
+// Fetches message of the partial reaction data
+
 module.exports.fetch = async reaction => {
     reaction = new Promise((resolve, reject) => {
         if(reaction.partial) {

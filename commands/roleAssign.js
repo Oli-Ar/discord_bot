@@ -45,7 +45,7 @@ const getTopMembers = async (bot, userPromise, server, i, j) => {
     await userPromise.then(rawUsers => {
         // Sorts the servers users into high xp -> low xp
         let userList = quickSort(server, Object.values(rawUsers).filter(o => o.servers[server.id]));
-
+        
         // Pushes mods who are top ten on the leaderboard and users who are top ten, excluding mods, to the users
         // collection which is then returned
         for(const user of userList) {

@@ -5,7 +5,7 @@ module.exports.run = async (bot, msg) => {
     let msgArgs = msg.content.split(" ").slice(1).join(" ");
     if(!msgArgs) {
         let embedCommands = [];
-
+        
         // Dynamically fetches all commands to be displayed
         bot.commands.forEach(command => {
             let name;

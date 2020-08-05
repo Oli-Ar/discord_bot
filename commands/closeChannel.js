@@ -29,16 +29,16 @@ module.exports.run = async (bot, msg) => {
 
 module.exports.help = {
     title: 'close',
-	runOn: 'prefix',
-	help: {
-	    name: "Close Channel",
-	    type: 'command',
-	    short_message: "Closes and archives mod mail channel.",
-	    long_message: "Closes and archives mod mail channel, if there is no archive " +
-		"category the bot will create it.",
-	    usage: {
-	        close: "[prefix]close",
-	    }
-	}
+        runOn: 'prefix',
+        help: {
+            name: "Close Channel",
+            type: 'command',
+            short_message: "Closes and archives mod mail channel.",
+            long_message: "Closes and archives mod mail channel, if there is no archive " +
+                "category the bot will create it.",
+            usage: {
+                close: "[prefix]close",
+                }
+        }
 };
 
