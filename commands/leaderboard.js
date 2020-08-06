@@ -6,7 +6,7 @@ module.exports.run = async (bot, msg) => {
         if(err) console.log(err);
         // Finds the XP of all the users in the server
         let xpList = await (Object.values(JSON.parse(res)))
-            .filter(o => o['servers'][msg.guild.id]);
+            .filter(o => o.servers[msg.guild.id]);
         // Sorts the order of users from Most XP -> Least XP
         xpList = quickSort(msg.guild, xpList);
         if(xpList.length <= 0) return msg.channel.send("No users have spoken in this server");
@@ -15,12 +15,12 @@ module.exports.run = async (bot, msg) => {
         // Each value in each chunk is mapped to be formatted text displaying the users position on the leader board
         // their name and their xp amount
         pages.forEach((chunk, i)  => {
-            pages[i] = chunk.map((obj, j) => `${i*10+j+1}. ${obj.name}: ${obj['servers'][msg.guild.id].score}`);
+            pages[i] = chunk.map((obj, j) => `${i*10+j+1}. ${obj.name}: ${obj.servers[msg.guild.id].score}`);
         });
         // Sends message saying leaderboard is being loaded - message will be edited
         msg.channel.send("Loading Leaderboard...")
             .then(sentMessage => {
-                swapPage(msg, sentMessage, 0, pages);
+                swapPage(msg, sentMessage, 0, pages, bot);
             });
     });
 };
@@ -36,7 +36,7 @@ function chunk(array, size) {
     return [firstChunk].concat(chunk(array.slice(size, array.length), size));
 }
 
-function swapPage(msg, sentMessage, page, pages) {
+function swapPage(msg, sentMessage, page, pages, bot) {
     // Means only forwards and backwards arrows will register as reactions to the bot
     const filter = (reaction, user) => {
         return (['⬅', '➡'].includes(reaction.emoji.name) && !user.bot);
@@ -51,7 +51,7 @@ function swapPage(msg, sentMessage, page, pages) {
             // Sets the arrows that users can click to swap pages the backwards arrow not available on first page and forwards on last page
             if(page !== 0) message.react('⬅');
             if(page !== pages.length-1) message.react('➡');
-            message.awaitReactions(filter, {max: 1})
+            message.awaitReactions(filter, { max: 1, time: 600000, errors: ['time'] })
                 .then(async reactions => {
                     // Checks the reaction the user sent and edits the message to reflect the new page as well as resetting the reactions
                     if(reactions.first().emoji.name === '⬅' && page !== 0) {
@@ -64,7 +64,11 @@ function swapPage(msg, sentMessage, page, pages) {
                         await message.reaction.removeAll();
                         return swapPage(msg, message, page, pages);
                     }
-                }).catch(err => console.log(err));
+                }).catch(err => {
+                    message.reactions.removeAll();
+                    return message.edit('Leaderboard expired, to see the updated leaderboard use the command `[prefix]leaderboard`'
+                        .replace("[prefix]", bot.settings.prefix));
+                });
         });
 }
 
