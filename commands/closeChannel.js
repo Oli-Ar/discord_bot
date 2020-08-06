@@ -25,6 +25,7 @@ module.exports.run = async (bot, msg) => {
         id: bot.user.id,
         allow: ["VIEW_CHANNEL", "SEND_MESSAGES"]
     }]);
+    msg.channel.send("Channel closed")
 };
 
 module.exports.help = {
