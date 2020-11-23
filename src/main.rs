@@ -33,7 +33,7 @@ async fn main() -> Result<(), sqlx::Error> {
     // Login with a bot token from the .env file
     dotenv().ok();
     let token = env::var("TOKEN").expect("TOKEN must be set");
-    let mut client = Client::new(token)
+    let mut client = Client::builder(token)
         .event_handler(Handler)
         .framework(framework)
         .await
