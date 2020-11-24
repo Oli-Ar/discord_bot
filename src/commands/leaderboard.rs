@@ -8,6 +8,7 @@ use serenity::model::channel::{Message, ReactionType};
 use futures_util::stream::StreamExt;
 use num_traits::cast::{FromPrimitive, ToPrimitive};
 
+// Struct to store in information of user to be fetched from database
 #[derive(Debug, Clone)]
 struct UserList {
     user_id: sqlx::types::BigDecimal,
@@ -26,6 +27,8 @@ pub async fn leaderboard(ctx: &Context, msg: &Message) -> CommandResult {
         .cloned()
         .unwrap();
 
+    // Fetch 100 max users from userserver and sorts them by xp then chunks them and collects them
+    // in 2d array
     let rows: Vec<UserList> = sqlx::query_as!(
         UserList,
         "
@@ -45,6 +48,7 @@ pub async fn leaderboard(ctx: &Context, msg: &Message) -> CommandResult {
         .map(|c| c.to_vec())
         .collect::<Vec<Vec<UserList>>>();
 
+    // Formats sub arrays from 2d arrays into pages with users name and score and positions
     let mut joined_pages: Vec<String> = Vec::new();
     let mut all_pages_stream = futures::stream::iter(row_chunks.into_iter().enumerate());
     while let Some((i, p)) = all_pages_stream.next().await {
@@ -79,6 +83,8 @@ async fn display_board(
     guild_name: String,
 ) -> CommandResult {
     loop {
+        // Makes embed with leaderboard as main info, title as guild name and pages and instruction
+        // as the footer
         sent_message
             .edit(ctx, |m| {
                 m.embed(|e| {
@@ -96,6 +102,7 @@ async fn display_board(
                 .content("")
             })
             .await?;
+        // If not first or last page shows arrows, shows only one on first page
         if page != 0 {
             sent_message
                 .react(&ctx.http, ReactionType::Unicode(String::from("◀\u{fe0f}")))
@@ -106,6 +113,8 @@ async fn display_board(
                 .react(&ctx.http, ReactionType::Unicode(String::from("▶\u{fe0f}")))
                 .await?;
         }
+
+        // Wait for arrow reactions and turn page on arrow reaction, timeout after 120s
         let reaction = sent_message
             .await_reaction(ctx)
             .timeout(core::time::Duration::from_secs(120))
