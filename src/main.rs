@@ -22,6 +22,8 @@ use crate::user_cache::UserCache;
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
+    // Sets bot framework prefix to be > (with sub functions having > prefix for >> prefix)
+    // requring there not to be whitespaces between before or after
     let framework = StandardFramework::new()
         .configure(|c| {
             c.with_whitespace(WithWhiteSpace::from(false))
@@ -46,7 +48,8 @@ async fn main() -> Result<(), sqlx::Error> {
         .connect(uri)
         .await?;
 
-    // Add the db connection pool to bot data field
+    // Add the db connection pool to bot data field - in brackets so that the RwLock goes out of
+    // scope quick
     {
         let mut data = client.data.write().await;
         data.insert::<PostgresPool>(pool);
@@ -64,6 +67,7 @@ async fn main() -> Result<(), sqlx::Error> {
 // Create type for db connection pool to pass into client
 pub struct PostgresPool;
 
+// Implement type map key for PgPool so it can be transferred between through bot context
 impl TypeMapKey for PostgresPool {
     type Value = PgPool;
 }
