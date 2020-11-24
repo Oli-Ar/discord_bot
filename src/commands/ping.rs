@@ -4,6 +4,8 @@ use serenity::model::channel::Message;
 
 #[command]
 pub async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
+    // Sends message and checks ping by working out difference in time message was sent and time
+    // for bot to reply, edits message to show this
     let mut reply = msg
         .channel_id
         .say(ctx, "Pong! Calculating ping to bot")
